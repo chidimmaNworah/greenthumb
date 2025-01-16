@@ -1,0 +1,53 @@
+.mobile_menu {
+  /* display: flex; */
+  /* background: #fff; */
+  /* box-shadow: ; */
+  color: rgb(71, 71, 71);
+  padding: 0 2rem;
+  font-size: 12px;
+  width: 100%;
+  position: relative;
+  /* overflow: hidden; */
+}
+
+.artwork_nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  z-index: 10;
+}
+.artwork_nav:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.mobile_menu div {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.mobile_menu div::-webkit-scrollbar {
+  display: none;
+}
+
+.artwork_nav__left {
+  left: 0;
+}
+
+.artwork_nav__right {
+  right: 0;
+}
+
+@media screen and (min-width: 762px) {
+  .mobile_menu {
+    display: none;
+  }
+}
