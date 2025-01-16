@@ -104,10 +104,6 @@
   }
 }
 
-.swiper_slide {
-  width: 80%;
-}
-
 .myswiper {
   div {
     .swiper-pagination {
@@ -115,6 +111,9 @@
         display: none;
       }
     }
+  }
+  .swiper_slide {
+    width: 80%;
   }
 }
 
