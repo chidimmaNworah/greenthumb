@@ -58,7 +58,7 @@
   .delicacies_hero div {
     display: flex;
     gap: 0.5em;
-    height: 6.6em;
+    height: 8rem;
   }
   .delicacies_hero div img {
     width: 50%;
@@ -69,7 +69,20 @@
     transform: scale(1.03);
     transition: all 0.4s ease-in-out;
   }
+  .fooddesc {
+    margin-bottom: 8px;
+    line-height: 16px;
+  }
 }
+
+// @media screen and (max-width: 562px) {
+//   .foodname {
+//     font-size: 0.em;
+//   }
+//   .fooddesc {
+//     font-size: 0.4em;
+//   }
+// }
 
 .restaurants {
   background-image: url("/banner.jpg");
