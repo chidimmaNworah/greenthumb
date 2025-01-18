@@ -1,19 +1,52 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import styles from "./style.module.css";
+import localFont from "next/font/local";
+
+const geistSans = localFont({
+  src: "../pages/fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "../pages/fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 export default function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const router = useRouter();
   const containerRef = useRef(null);
+
+  const currentPath = usePathname();
+
+  const isActive = (path) => {
+    return currentPath === path ? "text-[#A3F32D]" : "";
+  };
 
   useEffect(() => {
     // Simulate authentication check (replace with actual auth logic)
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
+
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const handleSignOut = () => {
@@ -35,47 +68,91 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav
+      className={`${
+        isScrolled ? "bg-white/20 backdrop-blur-md shadow-md" : "bg-transparent"
+      } sticky top-0 z-50 transition duration-300`}
+    >
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-green-700">
+        <Link href="/" className="text-xl font-bold text-gray-200">
           Green Thumb
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6 text-gray-700">
-          <Link href="/" className="hover:text-green-600">
+        <div className="hidden md:flex space-x-6 text-gray-200 text-sm font-[family-name:var(--font-geist-mono)">
+          <Link
+            href="/"
+            className={`${isActive(
+              "/"
+            )} hover:text-green-600 transition duration-300`}
+          >
             Homepage
           </Link>
-          <Link href="/recipes" className="hover:text-green-600">
+          <Link
+            href="/recipes"
+            className={`${isActive(
+              "/recipes"
+            )} hover:text-green-600 transition duration-300`}
+          >
             Recipes
           </Link>
-          <Link href="/blog" className="hover:text-green-600">
+          <Link
+            href="/blog"
+            className={`${isActive(
+              "/blog"
+            )} hover:text-green-600 transition duration-300`}
+          >
             Blog
           </Link>
-          <Link href="/about" className="hover:text-green-600">
+          <Link
+            href="/about"
+            className={`${isActive(
+              "/about"
+            )} hover:text-green-600 transition duration-300`}
+          >
             About
           </Link>
-          <Link href="/contact" className="hover:text-green-600">
+          <Link
+            href="/contact"
+            className={`${isActive(
+              "/contact"
+            )} hover:text-green-600 transition duration-300`}
+          >
             Contact Us
           </Link>
-          <Link href="/search" className="hover:text-green-600">
+          <Link
+            href="/search"
+            className={`${isActive(
+              "/search"
+            )} hover:text-green-600 transition duration-300`}
+          >
             Search
           </Link>
           {isAuthenticated ? (
             <button
               onClick={handleSignOut}
-              className="text-red-500 hover:text-red-700"
+              className="text-red-500 hover:text-red-700 transition duration-300"
             >
-              Sign Out
+              Logout
             </button>
           ) : (
             <>
-              <Link href="/auth/signin" className="hover:text-green-600">
-                Sign In
+              <Link
+                href="/auth/signin"
+                className={`${isActive(
+                  "/auth/signin"
+                )} hover:text-green-600 transition duration-300`}
+              >
+                Login
               </Link>
-              <Link href="/auth/signup" className="hover:text-green-600">
-                Sign Up
+              <Link
+                href="/auth/signup"
+                className={`${isActive(
+                  "/auth/signup"
+                )} hover:text-green-600 transition duration-300`}
+              >
+                Register
               </Link>
             </>
           )}
@@ -83,7 +160,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="block md:hidden focus:outline-none text-gray-700"
+          className="block md:hidden focus:outline-none text-gray-200"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <span className="sr-only">Toggle menu</span>
@@ -115,7 +192,7 @@ export default function Navbar() {
           >
             &#8592;
           </button>
-          <div className="" ref={containerRef}>
+          <div className="mx-6" ref={containerRef}>
             {[
               { href: "/", label: "Homepage" },
               { href: "/recipes", label: "Recipes" },
@@ -127,7 +204,9 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-4 py-2 hover:bg-gray-100"
+                className={`block px-4 py-2 transition duration-300 text-gray-200 hover:text-[#99E82B] ${isActive(
+                  item.href
+                )}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
@@ -141,20 +220,20 @@ export default function Navbar() {
                 }}
                 className="block w-full text-left px-4 py-2 text-red-500 hover:bg-red-100"
               >
-                Sign Out
+                Logout
               </button>
             ) : (
               <>
                 <Link
                   href="/auth/signin"
-                  className="block px-4 py-2 hover:bg-indigo-100"
+                  className="block px-4 py-2 text-white transition duration-300 hover:bg-indigo-100 hover:text-black"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="block px-4 py-2 hover:bg-indigo-100"
+                  className="block px-4 py-2 text-white transition duration-300  hover:bg-indigo-100 hover:text-black"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Register
